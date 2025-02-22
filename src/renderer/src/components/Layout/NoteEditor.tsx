@@ -5,6 +5,19 @@ import { CreateNoteModal } from '../CreateNoteModal'
 import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
+import Highlight from '@tiptap/extension-highlight'
+import Typography from '@tiptap/extension-typography'
+import TextAlign from '@tiptap/extension-text-align'
+import Link from '@tiptap/extension-link'
+import TextStyle from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
+import Table from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import { EditorToolbar } from '../EditorToolbar'
 
 export function NoteEditor(): JSX.Element {
   const { notes, selectedNoteId, updateNote } = useNotes()
@@ -18,15 +31,39 @@ export function NoteEditor(): JSX.Element {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+      }),
       Placeholder.configure({
         placeholder: 'Start typing your note...',
       }),
+      Highlight,
+      Typography,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Link.configure({
+        openOnClick: false,
+      }),
+      TextStyle,
+      Color,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: selectedNote?.content || '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none',
+        class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none px-8 py-4',
       },
     },
     onUpdate: useCallback(
@@ -80,9 +117,10 @@ export function NoteEditor(): JSX.Element {
             {selectedNote.title}
           </h1>
         </div>
+        <EditorToolbar editor={editor} />
       </div>
       <div className="flex flex-1 bg-white dark:bg-gray-800">
-        <div className="w-full px-6 py-4">
+        <div className="w-full">
           <EditorContent editor={editor} className="min-h-full w-full" />
         </div>
       </div>
