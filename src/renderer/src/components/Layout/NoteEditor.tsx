@@ -37,11 +37,6 @@ export function NoteEditor(): JSX.Element {
       <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
         {selectedNote.title}
       </h1>
-      {selectedNote.context && (
-        <div className="mb-4 rounded-lg bg-gray-100 p-3 dark:bg-gray-700">
-          <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNote.context}</p>
-        </div>
-      )}
       <div className="h-px bg-gray-200 dark:bg-gray-700" />
     </div>
   )
