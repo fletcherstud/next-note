@@ -18,6 +18,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }): JSX.
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null)
 
   const createNote = (data: CreateNoteData): Note => {
+    console.log('NotesContext: Creating new note with data:', data)
     const now = new Date()
     const newNote: Note = {
       id: uuidv4(),
@@ -27,13 +28,23 @@ export function NotesProvider({ children }: { children: React.ReactNode }): JSX.
       createdAt: now,
       updatedAt: now,
     }
+    console.log('NotesContext: New note object created:', newNote)
 
-    setNotes(prev => [newNote, ...prev])
+    setNotes(prev => {
+      console.log('NotesContext: Current notes count:', prev.length)
+      const newNotes = [newNote, ...prev]
+      console.log('NotesContext: New notes count:', newNotes.length)
+      return newNotes
+    })
+
+    console.log('NotesContext: Setting selected note ID:', newNote.id)
     setSelectedNoteId(newNote.id)
+
     return newNote
   }
 
   const selectNote = (id: string | null): void => {
+    console.log('NotesContext: Selecting note:', id)
     setSelectedNoteId(id)
   }
 

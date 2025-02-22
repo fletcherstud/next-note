@@ -21,11 +21,9 @@ export function MainLayout(): JSX.Element {
           </div>
         )}
 
-        {/* Main Content Area - Fixed width, becomes scrollable */}
-        <div className="flex h-full flex-shrink-0 flex-grow">
-          <div className="mx-auto h-full max-w-[850px]">
-            <NoteEditor />
-          </div>
+        {/* Main Content Area - Takes up remaining space */}
+        <div className="flex h-full w-full flex-1 overflow-hidden">
+          <NoteEditor />
         </div>
 
         {/* AI Panel - Collapses before navigation on smaller screens */}

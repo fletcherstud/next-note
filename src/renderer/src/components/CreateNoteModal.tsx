@@ -16,15 +16,30 @@ export function CreateNoteModal({ isOpen, onClose }: CreateNoteModalProps): JSX.
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
-    if (!title.trim()) return
+    console.log('Form submission started')
 
-    createNote({
-      title: title.trim(),
-      context: context.trim() || undefined,
-    })
-    onClose()
-    setTitle('')
-    setContext('')
+    if (!title.trim()) {
+      console.log('Title is empty, submission blocked')
+      return
+    }
+
+    try {
+      console.log('Creating note with:', {
+        title: title.trim(),
+        context: context.trim() || undefined,
+      })
+      const newNote = createNote({
+        title: title.trim(),
+        context: context.trim() || undefined,
+      })
+      console.log('Note created successfully:', newNote)
+
+      onClose()
+      setTitle('')
+      setContext('')
+    } catch (error) {
+      console.error('Error creating note:', error)
+    }
   }
 
   return (
