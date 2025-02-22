@@ -4,6 +4,7 @@ import { useNotes } from '../../hooks/useNotes'
 import { CreateNoteModal } from '../CreateNoteModal'
 import { EditableTitle } from '../EditableTitle'
 import { useEditor, EditorContent, Editor } from '@tiptap/react'
+import { EditorView } from 'prosemirror-view'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import Highlight from '@tiptap/extension-highlight'
@@ -49,6 +50,27 @@ export function NoteEditor(): JSX.Element {
       updateNote(selectedNote.id, { title: newTitle })
     }
   }
+
+  const handleContextMenu = useCallback((_view: EditorView, event: MouseEvent): boolean => {
+    // Prevent the default editor behavior (which shows the floating menu)
+    event.preventDefault()
+
+    // Create and dispatch a new context menu event to show the browser's native menu
+    const customEvent = new MouseEvent('contextmenu', {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+      button: 2,
+      buttons: 2,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      screenX: event.screenX,
+      screenY: event.screenY,
+    })
+
+    event.target?.dispatchEvent(customEvent)
+    return true
+  }, [])
 
   const editor = useEditor({
     extensions: [
@@ -107,6 +129,18 @@ export function NoteEditor(): JSX.Element {
       attributes: {
         class:
           'prose prose-sm dark:prose-invert max-w-none outline-none px-8 py-4 min-h-full [&_*]:outline-none [&_.has-focus]:ring-0 [&_p]:my-2 [&_pre]:bg-gray-100 dark:[&_pre]:bg-gray-800 [&_pre]:p-4 [&_pre]:rounded-lg [&_img]:max-w-full [&_img]:rounded-lg [&_hr]:my-4 [&_hr]:border-gray-200 dark:[&_hr]:border-gray-700',
+        spellcheck: 'true',
+        autocorrect: 'true',
+      },
+      handleDOMEvents: {
+        contextmenu: handleContextMenu,
+        mousedown: (view, event) => {
+          // Allow default behavior for right clicks
+          if (event.button === 2) {
+            return false
+          }
+          return true
+        },
       },
     },
     autofocus: 'end',
@@ -133,22 +167,24 @@ export function NoteEditor(): JSX.Element {
 
   if (!selectedNote) {
     return (
-      <div className="flex h-full flex-col items-center justify-center p-8">
-        <NotePencil className="mb-4 h-12 w-12 text-gray-400" weight="thin" />
-        <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
-          No Note Selected
-        </h2>
-        <p className="mb-8 text-center text-gray-600 dark:text-gray-400">
-          Select a note from the sidebar or create a new one to get started.
-        </p>
-        <button
-          onClick={() => setIsCreateModalOpen(true)}
-          className="bg-primary-600 hover:bg-primary-700 rounded-lg px-4 py-2 text-sm font-medium text-white"
-        >
-          Create New Note
-        </button>
+      <div className="flex h-full w-full flex-col items-center justify-center bg-white dark:bg-gray-800">
+        <div className="flex flex-col items-center">
+          <NotePencil className="mb-4 h-12 w-12 text-gray-400" weight="thin" />
+          <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+            No Note Selected
+          </h2>
+          <p className="mb-8 text-center text-gray-600 dark:text-gray-400">
+            Select a note from the sidebar or create a new one to get started.
+          </p>
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="bg-primary-600 hover:bg-primary-700 rounded-lg px-4 py-2 text-sm font-medium text-white"
+          >
+            Create New Note
+          </button>
 
-        <CreateNoteModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+          <CreateNoteModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+        </div>
       </div>
     )
   }
