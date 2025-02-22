@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { NotePencil } from '@phosphor-icons/react'
 import { useNotes } from '../../hooks/useNotes'
 import { CreateNoteModal } from '../CreateNoteModal'
+import { EditableTitle } from '../EditableTitle'
 import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -42,6 +43,12 @@ export function NoteEditor(): JSX.Element {
   useEffect(() => {
     console.log('NoteEditor: Selected note changed:', selectedNote?.id)
   }, [selectedNote])
+
+  const handleTitleChange = (newTitle: string): void => {
+    if (selectedNote) {
+      updateNote(selectedNote.id, { title: newTitle })
+    }
+  }
 
   const editor = useEditor({
     extensions: [
@@ -149,10 +156,8 @@ export function NoteEditor(): JSX.Element {
   return (
     <div className="flex h-full w-full flex-col">
       <div className="w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-        <div className="px-6 py-4">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {selectedNote.title}
-          </h1>
+        <div className="flex items-center px-6 py-4">
+          <EditableTitle title={selectedNote?.title || ''} onSave={handleTitleChange} />
         </div>
         <EditorToolbar editor={editor} />
       </div>
