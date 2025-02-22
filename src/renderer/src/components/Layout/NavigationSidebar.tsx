@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Plus, MagnifyingGlass, Note, Star, Trash, CaretDown } from '@phosphor-icons/react'
+import { Plus, MagnifyingGlass } from '@phosphor-icons/react'
 import { useNotes } from '../../hooks/useNotes'
 import { CreateNoteModal } from '../CreateNoteModal'
+import { NoteListItem } from '../NoteListItem'
 
 export function NavigationSidebar(): JSX.Element {
-  const { notes, selectedNoteId, selectNote } = useNotes()
+  const { notes, selectedNoteId, selectNote, deleteNote } = useNotes()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -40,53 +41,25 @@ export function NavigationSidebar(): JSX.Element {
         </div>
       </div>
 
-      {/* Navigation Lists */}
+      {/* Notes List */}
       <nav className="flex-1 overflow-y-auto p-4">
-        <div className="space-y-4">
-          {/* All Notes */}
-          <div>
-            <button className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-900 hover:bg-gray-200 dark:text-gray-100 dark:hover:bg-gray-700">
-              <div className="flex items-center gap-2">
-                <Note className="h-4 w-4 text-gray-500 dark:text-gray-400" weight="regular" />
-                <span>All Notes</span>
-              </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">24</span>
-            </button>
-          </div>
-
-          {/* Favorites */}
-          <div>
-            <button className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-900 hover:bg-gray-200 dark:text-gray-100 dark:hover:bg-gray-700">
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-gray-500 dark:text-gray-400" weight="regular" />
-                <span>Favorites</span>
-              </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">8</span>
-            </button>
-          </div>
-
-          {/* Notebooks */}
+        {filteredNotes.length === 0 ? (
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+            {searchQuery ? 'No notes found' : 'No notes yet'}
+          </p>
+        ) : (
           <div className="space-y-1">
-            <button className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-900 hover:bg-gray-200 dark:text-gray-100 dark:hover:bg-gray-700">
-              <div className="flex items-center gap-2">
-                <CaretDown className="h-4 w-4 text-gray-500 dark:text-gray-400" weight="regular" />
-                <span>Notebooks</span>
-              </div>
-            </button>
-            {/* Add notebook list items here */}
+            {filteredNotes.map(note => (
+              <NoteListItem
+                key={note.id}
+                note={note}
+                isSelected={selectedNoteId === note.id}
+                onSelect={selectNote}
+                onDelete={deleteNote}
+              />
+            ))}
           </div>
-
-          {/* Trash */}
-          <div>
-            <button className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-900 hover:bg-gray-200 dark:text-gray-100 dark:hover:bg-gray-700">
-              <div className="flex items-center gap-2">
-                <Trash className="h-4 w-4 text-gray-500 dark:text-gray-400" weight="regular" />
-                <span>Trash</span>
-              </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">3</span>
-            </button>
-          </div>
-        </div>
+        )}
       </nav>
 
       <CreateNoteModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
