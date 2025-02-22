@@ -1,7 +1,8 @@
-appId: com.electron.app
-productName: next-note
+appId: com.nextnote.app
+productName: Next Note
 directories:
   buildResources: build
+  output: dist
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -12,7 +13,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: next-note
+  executableName: Next Note
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

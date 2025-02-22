@@ -12,7 +12,7 @@ export function MainLayout(): JSX.Element {
       {/* Header */}
       <header className="h-12 border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
         <div className="flex h-full items-center justify-between px-4">
-          <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">AI Notes</h1>
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Next Note</h1>
           <select
             value={theme}
             onChange={e => setTheme(e.target.value as 'light' | 'dark' | 'system')}
@@ -45,7 +45,7 @@ export function MainLayout(): JSX.Element {
         </div>
 
         {/* Mobile Navigation Toggle */}
-        <button className="bg-primary-600 fixed bottom-4 left-4 rounded-full p-3 text-white shadow-lg xl:hidden">
+        <button className="fixed bottom-4 left-4 rounded-full border border-gray-200 bg-gray-50 p-3 text-gray-900 shadow-lg transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 xl:hidden">
           <svg
             className="h-6 w-6"
             fill="none"
@@ -63,7 +63,7 @@ export function MainLayout(): JSX.Element {
         </button>
 
         {/* Mobile AI Panel Toggle */}
-        <button className="bg-primary-600 fixed bottom-4 right-4 rounded-full p-3 text-white shadow-lg lg:hidden">
+        <button className="fixed bottom-4 right-4 rounded-full border border-gray-200 bg-gray-50 p-3 text-gray-900 shadow-lg transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 lg:hidden">
           <svg
             className="h-6 w-6"
             fill="none"
