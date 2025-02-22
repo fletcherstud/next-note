@@ -1,6 +1,17 @@
+import { useState } from 'react'
 import { Plus, MagnifyingGlass, Note, Star, Trash, CaretDown } from '@phosphor-icons/react'
+import { useNotes } from '../../hooks/useNotes'
+import { CreateNoteModal } from '../CreateNoteModal'
 
 export function NavigationSidebar(): JSX.Element {
+  const { notes, selectedNoteId, selectNote } = useNotes()
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const filteredNotes = notes.filter(note =>
+    note.title.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <div className="flex h-full flex-col border-r border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
       {/* Search and Create */}
@@ -13,11 +24,14 @@ export function NavigationSidebar(): JSX.Element {
             />
             <input
               type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search notes..."
               className="focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <button
+            onClick={() => setIsCreateModalOpen(true)}
             className="flex items-center justify-center rounded-lg border border-gray-200 bg-white p-2 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             aria-label="Create new note"
           >
@@ -74,6 +88,8 @@ export function NavigationSidebar(): JSX.Element {
           </div>
         </div>
       </nav>
+
+      <CreateNoteModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
     </div>
   )
 }
