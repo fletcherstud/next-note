@@ -3,8 +3,9 @@ export default {
   content: [
     "./src/renderer/src/**/*.{js,jsx,ts,tsx}",
   ],
+  darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {}
   },
   plugins: [],
 } 
