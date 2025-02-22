@@ -51,10 +51,37 @@ export default {
             },
             code: {
               color: 'inherit',
+              backgroundColor: 'var(--tw-prose-pre-bg)',
+              borderRadius: '0.25rem',
+              paddingInline: '0.25rem',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+            pre: {
+              backgroundColor: 'var(--tw-prose-pre-bg)',
+              borderRadius: '0.5rem',
+              padding: '1rem',
             },
             blockquote: {
               color: 'inherit',
               borderLeftColor: 'inherit',
+            },
+            hr: {
+              borderColor: 'inherit',
+            },
+            'ul > li::marker': {
+              color: 'inherit',
+            },
+            'ol > li::marker': {
+              color: 'inherit',
+            },
+            img: {
+              maxWidth: '100%',
+              borderRadius: '0.5rem',
             },
           },
         },

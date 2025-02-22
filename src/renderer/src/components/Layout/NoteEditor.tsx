@@ -17,7 +17,21 @@ import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
+import CharacterCount from '@tiptap/extension-character-count'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import Dropcursor from '@tiptap/extension-dropcursor'
+import Focus from '@tiptap/extension-focus'
+import FontFamily from '@tiptap/extension-font-family'
+import HorizontalRule from '@tiptap/extension-horizontal-rule'
+import Image from '@tiptap/extension-image'
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
+import Underline from '@tiptap/extension-underline'
+import { common, createLowlight } from 'lowlight'
 import { EditorToolbar } from '../EditorToolbar'
+import { FloatingFormatMenu } from '../FloatingFormatMenu'
+
+const lowlight = createLowlight(common)
 
 export function NoteEditor(): JSX.Element {
   const { notes, selectedNoteId, updateNote } = useNotes()
@@ -38,6 +52,8 @@ export function NoteEditor(): JSX.Element {
       }),
       Placeholder.configure({
         placeholder: 'Start typing your note...',
+        showOnlyWhenEditable: true,
+        showOnlyCurrent: false,
       }),
       Highlight,
       Typography,
@@ -59,13 +75,34 @@ export function NoteEditor(): JSX.Element {
       TableRow,
       TableHeader,
       TableCell,
+      CharacterCount,
+      CodeBlockLowlight.configure({
+        lowlight,
+        defaultLanguage: 'javascript',
+      }),
+      Dropcursor.configure({
+        color: '#38bdf8',
+        width: 2,
+      }),
+      Focus.configure({
+        className: 'has-focus',
+        mode: 'all',
+      }),
+      FontFamily,
+      HorizontalRule,
+      Image,
+      Subscript,
+      Superscript,
+      Underline,
     ],
     content: selectedNote?.content || '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none px-8 py-4',
+        class:
+          'prose prose-sm dark:prose-invert max-w-none outline-none px-8 py-4 min-h-full [&_*]:outline-none [&_.has-focus]:ring-0 [&_p]:my-2 [&_pre]:bg-gray-100 dark:[&_pre]:bg-gray-800 [&_pre]:p-4 [&_pre]:rounded-lg [&_img]:max-w-full [&_img]:rounded-lg [&_hr]:my-4 [&_hr]:border-gray-200 dark:[&_hr]:border-gray-700',
       },
     },
+    autofocus: 'end',
     onUpdate: useCallback(
       ({ editor }: { editor: Editor }) => {
         console.log('NoteEditor: Content update triggered')
@@ -120,8 +157,14 @@ export function NoteEditor(): JSX.Element {
         <EditorToolbar editor={editor} />
       </div>
       <div className="flex flex-1 bg-white dark:bg-gray-800">
-        <div className="w-full">
-          <EditorContent editor={editor} className="min-h-full w-full" />
+        <div className="relative flex w-full flex-col">
+          <FloatingFormatMenu editor={editor} />
+          <div
+            className="min-h-full w-full cursor-text"
+            onClick={() => editor?.chain().focus().run()}
+          >
+            <EditorContent editor={editor} className="min-h-full w-full" />
+          </div>
         </div>
       </div>
     </div>
