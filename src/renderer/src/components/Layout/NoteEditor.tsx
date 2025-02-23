@@ -81,8 +81,10 @@ export function NoteEditor(): JSX.Element {
       }),
       Placeholder.configure({
         placeholder: 'Start typing your note...',
+        emptyEditorClass: 'is-editor-empty',
+        emptyNodeClass: 'is-empty',
         showOnlyWhenEditable: true,
-        showOnlyCurrent: false,
+        showOnlyCurrent: true,
       }),
       Highlight,
       Typography,

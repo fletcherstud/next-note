@@ -21,8 +21,10 @@
   .ProseMirror p.is-editor-empty:first-child::before {
     @apply text-gray-400 dark:text-gray-500;
     content: attr(data-placeholder);
-    float: left;
     pointer-events: none;
+    position: absolute;
+    opacity: 0.75;
+    left: 32px;
     height: 0;
   }
 
