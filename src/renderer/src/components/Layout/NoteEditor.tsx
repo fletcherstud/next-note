@@ -199,14 +199,14 @@ export function NoteEditor(): JSX.Element {
         </div>
         <EditorToolbar editor={editor} />
       </div>
-      <div className="flex flex-1 bg-white dark:bg-gray-800">
-        <div className="relative flex w-full flex-col">
+      <div className="flex-1 overflow-hidden bg-white dark:bg-gray-800">
+        <div className="h-full overflow-y-auto">
           <FloatingFormatMenu editor={editor} />
           <div
-            className="min-h-full w-full cursor-text"
+            className="h-full w-full cursor-text px-8 py-4"
             onClick={() => editor?.chain().focus().run()}
           >
-            <EditorContent editor={editor} className="min-h-full w-full" />
+            <EditorContent editor={editor} className="h-full" />
           </div>
         </div>
       </div>
